@@ -26,9 +26,8 @@ RUN cd /usr/local/src && \
   aptitude hold nginx && \
   rm -f /usr/local/src/nginx_* && \
   rm -f /usr/local/src/nginx-debug* && \
-  echo "daemon off;" >> /etc/nginx/nginx.conf
-
-RUN mkdir -p /var/spool/nginx/tmp && \
+  echo "daemon off;" >> /etc/nginx/nginx.conf && \
+  mkdir -p /var/spool/nginx/tmp && \
   chown nginx:nginx /var/spool/nginx/tmp
 
 EXPOSE 80
