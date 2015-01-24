@@ -30,6 +30,13 @@ RUN cd /usr/local/src && \
   mkdir -p /var/spool/nginx/tmp && \
   chown nginx:nginx /var/spool/nginx/tmp
 
+RUN sed -i -e "s/worker_processes.*\;/worker_processes 8;/g" /etc/nginx/nginx.conf && \
+  sed -i -e "s/sendfile.*\;/sendfile off;/g" /etc/nginx/nginx.conf && \
+  sed -i -e "s/worker_connections.*\;/worker_connections 10000;/g" /etc/nginx/nginx.conf && \
+  sed -i -e "/worker_connections/a multi_accept on;\nuse epoll;" /etc/nginx/nginx.conf
+
 EXPOSE 80
+
+VOLUME ["/var/log/nginx"]
 
 CMD ["/usr/sbin/nginx"]
