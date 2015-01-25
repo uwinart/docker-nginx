@@ -28,7 +28,8 @@ RUN cd /usr/local/src && \
   rm -f /usr/local/src/nginx-debug* && \
   echo "daemon off;" >> /etc/nginx/nginx.conf && \
   mkdir -p /var/spool/nginx/tmp && \
-  chown nginx:nginx /var/spool/nginx/tmp
+  chown nginx:nginx /var/spool/nginx/tmp && \
+  apt-get clean
 
 RUN sed -i -e "s/worker_processes.*\;/worker_processes 8;/g" /etc/nginx/nginx.conf && \
   sed -i -e "s/sendfile.*\;/sendfile off;/g" /etc/nginx/nginx.conf && \
