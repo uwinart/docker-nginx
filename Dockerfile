@@ -31,10 +31,18 @@ RUN cd /usr/local/src && \
   chown nginx:nginx /var/spool/nginx/tmp && \
   apt-get clean
 
+RUN mkdir -p /usr/local/share/geoip && \
+  cd /usr/local/share/geoip && \
+  wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz && \
+  gunzip GeoIP.dat.gz && \
+  wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz && \
+  gunzip GeoLiteCity.dat.gz
+
 RUN sed -i -e "s/worker_processes.*\;/worker_processes 8;/g" /etc/nginx/nginx.conf && \
   sed -i -e "s/sendfile.*\;/sendfile off;/g" /etc/nginx/nginx.conf && \
   sed -i -e "s/worker_connections.*\;/worker_connections 10000;/g" /etc/nginx/nginx.conf && \
-  sed -i -e "/worker_connections/a multi_accept on;\nuse epoll;" /etc/nginx/nginx.conf
+  sed -i -e "/worker_connections/a multi_accept on;\nuse epoll;" /etc/nginx/nginx.conf && \
+  sed -i "/http {/a geoip_country /usr/local/share/geoip/GeoIP.dat;\ngeoip_city /usr/local/share/geoip/GeoLiteCity.dat;" /etc/nginx/nginx.conf
 
 EXPOSE 80
 
